@@ -1,3 +1,7 @@
+input[type=number] {
+    width: 75px;
+}
+
 table {
     font-family: "Lucida Console", Monaco, monospace;
     font-size: 10pt;
@@ -8,6 +12,11 @@ table {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    cursor: copy;
+}
+
+table.dragging {
+    cursor: ew-resize;
 }
 
 table td {
@@ -15,12 +24,27 @@ table td {
     margin: 0;
     width:10px;
     text-align: center;
+    border-right: 1px solid transparent;
 }
 
-table col.drag-display {
-    border-right: 1px dashed lightgray;
+.drag-display {
+    border-right: 1px solid gray;
 }
 
-table col.column-stop {
+.column-stop {
     border-right: 1px solid red;
+    cursor: ew-resize;
+}
+
+table th {
+    background: lightblue;
+    border-right: 1px solid transparent;
+}
+
+table th.column-stop {
+    background: red;
+}
+
+table th.drag-display {
+    background: gray;
 }

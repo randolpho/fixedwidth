@@ -1,14 +1,28 @@
 <h4>{{fixedWidthData}}</h4>
-<table>
+<table ng-class="{'dragging': selectingColumn}">
     <colgroup>
-        <col ng-repeat="col in columns"
+        <col ng-repeat="col in displayColumns"
              ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}">
     </colgroup>
-    <tr ng-repeat="row in lines track by $index">
-        <td ng-repeat="col in row track by $index"
-            ng-mousedown="startSelectingColumn($index, $event)"
-            ng-mouseover="cellMouseOver($index)">
-            {{col}}
-        </td>
-    </tr>
+    <thead>
+        <tr>
+            <th ng-repeat="col in displayColumns track by $index"
+                ng-mousedown="startEditingColumn($index, $event)"
+                ng-mouseover="cellMouseOver($index)"
+                ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}">
+                &nbsp;
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr ng-repeat="row in lines track by $index">
+            <td ng-repeat="col in displayColumns track by $index"
+                ng-mousedown="startSelectingColumn($index, $event)"
+                ng-mouseover="cellMouseOver($index)"
+                ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}"
+                ng-bind-html="getValue(row, $index)">
+                &nbsp;
+            </td>
+        </tr>
+    </tbody>
 </table>

@@ -9,7 +9,14 @@
     <script src="directive.js"></script>
 </head>
 <body ng-controller="IndexController">
+<h4>Add Column Stop</h4>
+<form ng-submit="addStop">
+    <input type="number" ng-model="currentStop">
+    <button ng-click="addStop()">Add</button>
+</form>
 
-<div fixed-width-selector lines="fileData" num-columns="35"></div>
+<div>{{columnStops}}</div>
+
+<div fixed-width-selector lines="fileData" columns="columnStops"></div>
 </body>
 </html>

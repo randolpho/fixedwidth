@@ -1,73 +1,135 @@
 (function (angular) {
+    function FixedWidthController($scope, $document, $sce) {
+        $scope.displayColumns = [];
+        $scope.selectingColumn = false;
+        var editingColumn = false;
+        var lastDisplayedColumn = -1;
+        var columnBeingEdited = -1;
 
-    function px(val) {
-        return val + "px";
-    }
-
-    function FixedWidthController($scope, $document) {
-        $scope.columns = [];
-        for (var i = 0; i < $scope.numColumns; i++) {
-            $scope.columns.push({
-                isColumnStop: false,
-                displayDraggingColumn: false
-            });
+        function maxItemLength(arr) {
+            var max = arr[0].length;
+            for (var i = 0; i < arr.length; i++) {
+                if (arr[i].length > max) {
+                    max = arr[i].length;
+                }
+            }
+            return max;
         }
 
-        var selectingColumn = false;
-        var lastDisplayedColumn = -1;
+        function addDisplayColumns(toLength) {
+            while($scope.displayColumns.length < toLength) {
+                $scope.displayColumns.push({
+                    isColumnStop : false,
+                    displayDraggingColumn : false
+                });
+            }
+        }
+
+        function clearDisplayColumns() {
+            for (var i = 0; i < $scope.displayColumns.length; i++) {
+                $scope.displayColumns[i].isColumnStop = false;
+                $scope.displayColumns[i].displayDraggingColumn = false;
+            }
+        }
 
         function windowMouseupListener(event) {
-            if (!selectingColumn) {
+            if (!$scope.selectingColumn) {
                 return;
             }
             if (event.which !== 1) { // left mouse button
                 return;
             }
-            selectingColumn = false;
-            $scope.columns[lastDisplayedColumn].isColumnStop = true;
-            $scope.columns[lastDisplayedColumn].displayDraggingColumn = false;
+            $scope.$apply(function () {
+                if (editingColumn) {
+                    var columnIndex = $scope.columns.indexOf(columnBeingEdited);
+                    $scope.columns.splice(columnIndex, 1, lastDisplayedColumn);
+                }
+                else {
+                    $scope.columns.push(lastDisplayedColumn)
+                }
+                $scope.selectingColumn = false;
+                editingColumn = false;
+                lastDisplayedColumn = -1;
+                columnBeingEdited = -1;
+            });
         }
 
         $document.on("mouseup", windowMouseupListener);
 
         $scope.$on("$destroy", function () {
-            $window.off("mouseup", windowMouseupListener);
+            $document.off("mouseup", windowMouseupListener);
         });
+
+        $scope.$watchCollection("columns", function (newValues, oldValues) {
+            clearDisplayColumns();
+            for (var i = 0; i < $scope.columns.length; i++) {
+                var index = $scope.columns[i];
+                if(index > $scope.displayColumns.length) {
+                    addDisplayColumns(index +1);
+                }
+                $scope.displayColumns[index].isColumnStop = true;
+            }
+        });
+
+        $scope.startEditingColumn = function (index, event) {
+            if (event.which !== 1) { //left mouse button
+                return;
+            }
+            if(columnBeingEdited === -1) {
+                $scope.startSelectingColumn(index, event);
+                return;
+            }
+            $scope.selectingColumn = true;
+            editingColumn = true;
+            lastDisplayedColumn = index;
+            columnBeingEdited = index;
+            $scope.displayColumns[index].displayDraggingColumn = true;
+        };
 
         $scope.startSelectingColumn = function (index, event) {
             if (event.which !== 1) { // left mouse button
                 return;
             }
-            selectingColumn = true;
+            $scope.selectingColumn = true;
+            editingColumn = false;
             lastDisplayedColumn = index;
-            $scope.columns[index].displayDraggingColumn = true;
+            $scope.displayColumns[index].displayDraggingColumn = true;
         };
 
         $scope.cellMouseOver = function (index) {
-            if (!selectingColumn) {
+            if (!$scope.selectingColumn) {
                 return;
             }
-            $scope.columns[lastDisplayedColumn].displayDraggingColumn = false;
-            $scope.columns[index].displayDraggingColumn = true;
+            $scope.displayColumns[lastDisplayedColumn].displayDraggingColumn = false;
+            $scope.displayColumns[index].displayDraggingColumn = true;
             lastDisplayedColumn = index;
         };
-    }
 
-    function DomLinker(scope, element, attrs) {
+        $scope.getValue = function(str, index) {
+            if(index > str.length ) {
+                return $sce.trustAsHtml("&nbsp;");
+            }
+            var val = str[index];
+            if(val === " ") {
+                return $sce.trustAsHtml("&nbsp;");
+            }
+            return $sce.trustAsHtml(val);
+        }
 
+        if ($scope.lines.length > 0) {
+            addDisplayColumns(maxItemLength($scope.lines));
+        }
     }
 
     var module = angular.module("fwidth", []);
     module.directive("fixedWidthSelector", function () {
         return {
-            restrict: "AE",
-            templateUrl: "template.html",
-//            link: DomLinker,
-            controller: FixedWidthController,
-            scope: {
-                lines: "=",
-                numColumns: "="
-
+            restrict : "AE",
+            templateUrl : "template.html",
+            controller : FixedWidthController,
+            scope : {
+                lines : "=",
+                columns : "="
             }
         };
     })

@@ -22,5 +22,12 @@
            "this is a line of the file",
            "this is a line of the file",
        ];
+
+        $scope.columnStops = [];
+        $scope.currentStop = "";
+        $scope.addStop = function() {
+            $scope.columnStops.push($scope.currentStop);
+            $scope.currentStop = "";
+        }
     });
 })(angular);
