@@ -1,0 +1,14 @@
+<h4>{{fixedWidthData}}</h4>
+<table>
+    <colgroup>
+        <col ng-repeat="col in columns"
+             ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}">
+    </colgroup>
+    <tr ng-repeat="row in lines track by $index">
+        <td ng-repeat="col in row track by $index"
+            ng-mousedown="startSelectingColumn($index, $event)"
+            ng-mouseover="cellMouseOver($index)">
+            {{col}}
+        </td>
+    </tr>
+</table>
