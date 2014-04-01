@@ -48,3 +48,11 @@ table th.column-stop {
 table th.drag-display {
     background: gray;
 }
+
+input.ng-invalid.ng-dirty {
+    background-color: #FA787E;
+}
+
+input.ng-valid.ng-dirty {
+    background-color: #78FA89;
+}

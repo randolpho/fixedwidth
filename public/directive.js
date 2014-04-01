@@ -17,10 +17,10 @@
         }
 
         function addDisplayColumns(toLength) {
-            while($scope.displayColumns.length < toLength) {
+            while ($scope.displayColumns.length < toLength) {
                 $scope.displayColumns.push({
-                    isColumnStop : false,
-                    displayDraggingColumn : false
+                    isColumnStop: false,
+                    displayDraggingColumn: false
                 });
             }
         }
@@ -41,11 +41,14 @@
             }
             $scope.$apply(function () {
                 if (editingColumn) {
-                    var columnIndex = $scope.columns.indexOf(columnBeingEdited);
-                    $scope.columns.splice(columnIndex, 1, lastDisplayedColumn);
+                    $scope.columns[lastDisplayedColumn] = $scope.columns[columnBeingEdited];
+                    delete $scope.columns[columnBeingEdited];
+//                    var columnIndex = $scope.columns.indexOf(columnBeingEdited);
+//                    $scope.columns.splice(columnIndex, 1, lastDisplayedColumn);
                 }
                 else {
-                    $scope.columns.push(lastDisplayedColumn)
+                    var name = prompt("Please enter a name for this column");
+                    $scope.columns[lastDisplayedColumn] = name;
                 }
                 $scope.selectingColumn = false;
                 editingColumn = false;
@@ -60,22 +63,26 @@
             $document.off("mouseup", windowMouseupListener);
         });
 
-        $scope.$watchCollection("columns", function (newValues, oldValues) {
+        $scope.$watch("columns", function () {
             clearDisplayColumns();
-            for (var i = 0; i < $scope.columns.length; i++) {
-                var index = $scope.columns[i];
-                if(index > $scope.displayColumns.length) {
-                    addDisplayColumns(index +1);
+            var columns = Object.keys($scope.columns);
+            for (var i = 0; i < columns.length; i++) {
+                var index = parseInt(columns[i]);
+                if (index < 0) {
+                    continue;
+                }
+                if (index > $scope.displayColumns.length) {
+                    addDisplayColumns(index + 1);
                 }
                 $scope.displayColumns[index].isColumnStop = true;
             }
-        });
+        }, true);
 
         $scope.startEditingColumn = function (index, event) {
             if (event.which !== 1) { //left mouse button
                 return;
             }
-            if(columnBeingEdited === -1) {
+            if (columnBeingEdited === -1) {
                 $scope.startSelectingColumn(index, event);
                 return;
             }
@@ -105,12 +112,12 @@
             lastDisplayedColumn = index;
         };
 
-        $scope.getValue = function(str, index) {
-            if(index > str.length ) {
+        $scope.getValue = function (str, index) {
+            if (index > str.length) {
                 return $sce.trustAsHtml("&nbsp;");
             }
             var val = str[index];
-            if(val === " ") {
+            if (val === " ") {
                 return $sce.trustAsHtml("&nbsp;");
             }
             return $sce.trustAsHtml(val);
@@ -124,14 +131,24 @@
     var module = angular.module("fwidth", []);
     module.directive("fixedWidthSelector", function () {
         return {
-            restrict : "AE",
-            templateUrl : "template.html",
-            controller : FixedWidthController,
-            scope : {
-                lines : "=",
-                columns : "="
+            restrict: "AE",
+            templateUrl: "template.html",
+            controller: FixedWidthController,
+            scope: {
+                lines: "=",
+                columns: "="
             }
         };
-    })
+    });
+
+    module.directive("focusOnEvent", function () {
+        return function (scope, elem, attr) {
+            if (attr.focusOnEvent) {
+                scope.$on(attr.focusOnEvent, function () {
+                    elem[0].focus();
+                });
+            }
+        };
+    });
 
 })(angular);

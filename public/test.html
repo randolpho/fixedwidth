@@ -10,9 +10,22 @@
 </head>
 <body ng-controller="IndexController">
 <h4>Add Column Stop</h4>
-<form ng-submit="addStop">
-    <input type="number" ng-model="currentStop">
-    <button ng-click="addStop()">Add</button>
+<form ng-submit="addStop()" novalidate name="stopForm">
+    <table>
+        <tr>
+            <td>Field Name</td>
+            <td>Offset</td>
+        </tr>
+        <tr>
+            <td><input type="text" ng-model="currentName" required focus-on-event="currentNameFocus" /></td>
+            <td><input type="number" min="0" ng-model="currentStop" required /></td>
+        </tr>
+        <tr>
+            <td colspan="2">
+                <button ng-click="addStop()">Add Column Stop</button>
+            </td>
+        </tr>
+    </table>
 </form>
 
 <div>{{columnStops}}</div>
