@@ -24,11 +24,14 @@ input[type=number] {
 }
 
 .column-header {
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
     height: 20px;
     background: lightblue;
     cursor: copy;
-    position: relative;
-    width: 300px;
 }
 .column-header div {
     position: absolute;
@@ -37,7 +40,7 @@ input[type=number] {
 .column-stop {
     position: absolute;
     left: 120px;
-    width: 10px;
+    width: 9px;
     border-right: 1px solid red;
     cursor: ew-resize;
     z-index: 10;

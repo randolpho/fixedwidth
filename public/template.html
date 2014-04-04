@@ -1,14 +1,26 @@
 <h4>{{fixedWidthData}}</h4>
-<div class="column-header">
-    <div class="column-stop-drag" ng-style="{height: overlayHeight}">
+<div class="column-header"
+     ng-mouseover="dragMouseover($event)"
+     ng-style="{width: displayWidth}">
+    <div class="column-stop-drag"
+         ng-style="{height: overlayHeight, left: dragLeft}"
+         ng-show="isDragging">
         <div class="stop-header">&nbsp;</div>
     </div>
-    <div ng-repeat="col in columns" class="column-stop" ng-style="{height: overlayHeight, left: getLeft(col)}">
+    <div ng-repeat="col in columns"
+         class="column-stop"
+         ng-mouseover="startColumnEdit($event, col)"
+         ng-style="{height: overlayHeight, left: getLeft(col)}">
         <div class="stop-header">&nbsp;</div>
     </div>
 </div>
-<div class="file-lines" ng-repeat="line in lines track by $index">
-    <div ng-repeat="col in line track by $index">{{col}}</div>
+<div class="file-lines"
+     ng-repeat="line in lines track by $index"
+     ng-style="{width: displayWidth}"
+     ng-mouseover="dragMouseover($event)">
+    <div ng-repeat="col in line track by $index"
+         ng-mousedown="startColumnAdd($event, col)">{{col}}
+    </div>
 </div>
 
 <!--<table ng-class="{'dragging': selectingColumn}">-->

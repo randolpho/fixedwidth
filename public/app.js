@@ -23,7 +23,9 @@
             "this is a line of the file",
         ];
 
-        $scope.columnStops = {12:"something"};
+        $scope.columnStops = [
+            { index:12, name:"something"}
+        ];
         $scope.currentStop = null;
         $scope.currentName = null;
         $scope.addStop = function () {
@@ -33,7 +35,7 @@
             if (!$scope.currentName) {
                 return;
             }
-            $scope.columnStops[$scope.currentStop] = $scope.currentName;
+            $scope.columnStops.push({index:$scope.currentStop, name:$scope.currentName});
             $scope.currentStop = null;
             $scope.currentName = null;
             $scope.stopForm.$setPristine();

@@ -1,18 +1,78 @@
 (function (angular) {
     function FixedWidthController($scope, $document, $sce) {
+
         function px(val) {
             return val + "px";
         }
+
         var lineHeight = 20;
         var colWidth = 10;
         $scope.overlayHeight = px(0);
-        $scope.$watchCollection("lines", function() {
-            $scope.overlayHeight = px(($scope.lines.length * lineHeight) + lineHeight);
+        $scope.displayWidth = px(0);
+        $scope.numRows = 0;
+        $scope.isDragging = false;
+        $scope.numCols = 0;
+        $scope.dragLeft = px(0);
+        var adding = false;
+        var editingColumn = -1;
+
+        function setNumCols() {
+            var maxDisplayCol = 0;
+            for(var i=0; i<$scope.columns.length; i++) {
+                if($scope.columns[i].index > maxDisplayCol) {
+                    maxDisplayCol = $scope.columns[i].index;
+                }
+            }
+            var maxLineCol = 0;
+            for(var i=0; i<$scope.lines.length; i++)
+            {
+                if($scope.lines[i].length > maxLineCol) {
+                    maxLineCol = $scope.lines[i].length;
+                }
+            }
+            var max = Math.max(maxDisplayCol, maxLineCol);
+            $scope.numCols = max;
+            $scope.displayWidth = px((max * colWidth) +colWidth);
+        }
+
+        $scope.$watchCollection("columns", function () {
+            setNumCols();
+        });
+        $scope.$watchCollection("lines", function () {
+            $scope.numRows = $scope.lines.length;
+            $scope.overlayHeight = px(($scope.numRows * lineHeight) + lineHeight);
+            setNumCols();
         });
 
-        $scope.getLeft = function(col) {
-            return col.
+        $scope.getLeft = function (col) {
+            return px((col.index + 1) * colWidth);
         };
+
+        $scope.startColumnAdd = function(event, col) {
+            $scope.isDragging = true;
+            adding = true;
+
+        };
+        function windowMouseupListener(event) {
+            if (!$scope.isDragging) {
+                return;
+            }
+            if (event.which !== 1) { // left mouse button
+                return;
+            }
+            $scope.$apply(function () {
+                if (adding) {
+                    // todo: mouse calcs
+                }
+            });
+        }
+
+        $document.on("mouseup", windowMouseupListener);
+
+        $scope.$on("$destroy", function () {
+            $document.off("mouseup", windowMouseupListener);
+        });
+
 
 //        $scope.displayColumns = [];
 //        $scope.selectingColumn = false;
@@ -165,4 +225,5 @@
         };
     });
 
-})(angular);
+})
+(angular);
