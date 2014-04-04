@@ -23,7 +23,7 @@
             "this is a line of the file",
         ];
 
-        $scope.columnStops = {};
+        $scope.columnStops = {12:"something"};
         $scope.currentStop = null;
         $scope.currentName = null;
         $scope.addStop = function () {

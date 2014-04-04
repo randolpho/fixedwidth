@@ -2,57 +2,126 @@ input[type=number] {
     width: 75px;
 }
 
-table {
+.file-lines {
+    margin: 0;
+    padding: 0;
     font-family: "Lucida Console", Monaco, monospace;
-    font-size: 10pt;
-    border-collapse: collapse;
-    border: 0px;
+    font-size: 15px;
     -webkit-user-select: none;
     -khtml-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
+    height: 20px;
+    line-height: 20px;
     cursor: copy;
 }
 
-table.dragging {
-    cursor: ew-resize;
-}
-
-table td {
-    padding: 0;
-    margin: 0;
-    width:10px;
+.file-lines > div {
+    display: inline-block;
+    width: 10px;
     text-align: center;
-    border-right: 1px solid transparent;
 }
 
-.drag-display {
-    border-right: 1px solid gray;
+.column-header {
+    height: 20px;
+    background: lightblue;
+    cursor: copy;
+    position: relative;
+    width: 300px;
+}
+.column-header div {
+    position: absolute;
 }
 
 .column-stop {
+    position: absolute;
+    left: 120px;
+    width: 10px;
     border-right: 1px solid red;
     cursor: ew-resize;
+    z-index: 10;
 }
 
-table th {
-    background: lightblue;
-    border-right: 1px solid transparent;
-}
-
-table th.column-stop {
+.column-stop div.stop-header {
     background: red;
+    height: 20px;
+    width: 10px;
+    z-index: 10;
 }
 
-table th.drag-display {
+.column-stop-drag {
+    position: absolute;
+    left: 110px;
+    width: 10px;
+    height: 200px;
+    border-right: 1px solid gray;
+    cursor: ew-resize;
+    z-index: 5;
+}
+
+.column-stop-drag div.stop-header {
     background: gray;
+    height: 20px;
+    width: 10px;
+    z-index: 5;
 }
 
-input.ng-invalid.ng-dirty {
-    background-color: #FA787E;
-}
+/*table {*/
+    /*font-family: "Lucida Console", Monaco, monospace;*/
+    /*font-size: 10pt;*/
+    /*border-collapse: collapse;*/
+    /*border: 0px;*/
+    /*-webkit-user-select: none;*/
+    /*-khtml-user-select: none;*/
+    /*-moz-user-select: none;*/
+    /*-ms-user-select: none;*/
+    /*user-select: none;*/
+    /*cursor: copy;*/
+/*}*/
 
-input.ng-valid.ng-dirty {
-    background-color: #78FA89;
-}
+/*table.dragging {*/
+    /*cursor: ew-resize;*/
+/*}*/
+
+/*table td {*/
+    /*padding: 0;*/
+    /*margin: 0;*/
+    /*width:10px;*/
+    /*text-align: center;*/
+    /*border-right: 1px solid transparent;*/
+/*}*/
+
+/*.drag-display {*/
+    /*border-right: 1px solid gray;*/
+/*}*/
+
+/*.column-stop {*/
+    /*border-right: 1px solid red;*/
+    /*cursor: ew-resize;*/
+/*}*/
+
+/*table th {*/
+    /*background: lightblue;*/
+    /*border-right: 1px solid transparent;*/
+/*}*/
+
+/*table td {*/
+    /*vertical-align: top;*/
+/*}*/
+
+/*table th.column-stop {*/
+    /*background: red;*/
+/*}*/
+
+/*table th.drag-display {*/
+    /*background: gray;*/
+/*}*/
+
+/*input.ng-invalid.ng-dirty {*/
+    /*background-color: #FA787E;*/
+/*}*/
+
+/*input.ng-valid.ng-dirty {*/
+    /*background-color: #78FA89;*/
+/*}*/

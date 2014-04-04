@@ -22,7 +22,7 @@
         </tr>
         <tr>
             <td colspan="2">
-                <button ng-click="addStop()">Add Column Stop</button>
+                <button ng-click="addStop()" ng-disabled="stopForm.$invalid">Add Column Stop</button>
             </td>
         </tr>
     </table>

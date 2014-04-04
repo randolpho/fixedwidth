@@ -1,28 +1,35 @@
 <h4>{{fixedWidthData}}</h4>
-<table ng-class="{'dragging': selectingColumn}">
-    <colgroup>
-        <col ng-repeat="col in displayColumns"
-             ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}">
-    </colgroup>
-    <thead>
-        <tr>
-            <th ng-repeat="col in displayColumns track by $index"
-                ng-mousedown="startEditingColumn($index, $event)"
-                ng-mouseover="cellMouseOver($index)"
-                ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}">
-                &nbsp;
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr ng-repeat="row in lines track by $index">
-            <td ng-repeat="col in displayColumns track by $index"
-                ng-mousedown="startSelectingColumn($index, $event)"
-                ng-mouseover="cellMouseOver($index)"
-                ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}"
-                ng-bind-html="getValue(row, $index)">
-                &nbsp;
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="column-header">
+    <div class="column-stop-drag" ng-style="{height: overlayHeight}">
+        <div class="stop-header">&nbsp;</div>
+    </div>
+    <div ng-repeat="col in columns" class="column-stop" ng-style="{height: overlayHeight, left: getLeft(col)}">
+        <div class="stop-header">&nbsp;</div>
+    </div>
+</div>
+<div class="file-lines" ng-repeat="line in lines track by $index">
+    <div ng-repeat="col in line track by $index">{{col}}</div>
+</div>
+
+<!--<table ng-class="{'dragging': selectingColumn}">-->
+<!--<thead>-->
+<!--<tr>-->
+<!--<th ng-repeat="col in displayColumns track by $index"-->
+<!--ng-mousedown="startEditingColumn($index, $event)"-->
+<!--ng-mouseover="cellMouseOver($index)"-->
+<!--ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}">-->
+<!--&nbsp;-->
+<!--</th>-->
+<!--</tr>-->
+<!--</thead>-->
+<!--<tbody>-->
+<!--<tr>-->
+<!--<td ng-repeat="col in displayColumns"-->
+<!--ng-mousedown="startSelectingColumn($index, $event)"-->
+<!--ng-mouseover="cellMouseOver($index)"-->
+<!--ng-class="{'column-stop':col.isColumnStop, 'drag-display':col.displayDraggingColumn}">-->
+<!--<div ng-repeat="row in lines track by $index" ng-bind-html="getValue(row, $parent.$index)"></div>-->
+<!--</td>-->
+<!--</tr>-->
+<!--</tbody>-->
+<!--</table>-->
